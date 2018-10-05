@@ -1,0 +1,28 @@
+{
+  "name": "nascom/itsme-api-client",
+  "description": "PHP client to connect to the itsme API ",
+  "type": "library",
+  "authors": [{
+    "name": "Brecht Ceyssens",
+    "role": "Lead Developer"
+  }],
+  "keywords": [
+    "itsme",
+    "api"
+  ],
+  "license": "MIT",
+  "require": {
+    "php": ">=5.6"
+  },
+  "suggest": {
+    "guzzlehttp/guzzle": "Needed to use the premade HttpClient implementation"
+  },
+  "autoload": {
+    "psr-4": {
+      "Nascom\\ItsmeApiClient\\":  ["src/"]
+    }
+  },
+  "config": {
+    "bin-dir": "bin"
+  }
+}

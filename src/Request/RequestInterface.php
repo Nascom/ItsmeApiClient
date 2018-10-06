@@ -34,4 +34,9 @@ interface RequestInterface
      * @return string
      */
     public function getResponseClass();
+
+    /**
+     * @return array
+     */
+    public function getBody();
 }

@@ -46,6 +46,11 @@ abstract class AbstractRequest implements RequestInterface
         return $this->parameters;
     }
 
+    public function getBody()
+    {
+        return [];
+    }
+
     /**
      * @inheritdoc
      */

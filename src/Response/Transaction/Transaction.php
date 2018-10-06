@@ -9,7 +9,6 @@ namespace Nascom\ItsmeApiClient\Response\Transaction;
  */
 class Transaction
 {
-
     /**
      * @var string
      */

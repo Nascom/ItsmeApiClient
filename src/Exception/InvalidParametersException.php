@@ -7,7 +7,7 @@ namespace Nascom\ItsmeApiClient\Exception;
  *
  * @package Nascom\ItsmeApiClient\Exception
  */
-class InvalidParametersException extends \RuntimeException
+class InvalidParametersException extends ItsMeException
 {
-
+    //
 }

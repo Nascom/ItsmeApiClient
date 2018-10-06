@@ -35,7 +35,7 @@ class Address
      *
      * @return Address
      */
-    public static function fromArray($data = []) {
+    public static function fromArray(array $data) {
         $address = new self();
 
         $address->streetAddress = $data['streetAddress'];

@@ -1,6 +1,7 @@
 # Composer generated directories
 bin/
 vendor/
+composer.lock
 
 # Editors
 .idea/

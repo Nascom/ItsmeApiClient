@@ -12,7 +12,6 @@ use Nascom\ItsmeApiClient\Response\Status\Status;
  */
 class RetrieveStatusRequest extends AbstractGetRequest
 {
-
     /**
      * @var string
      */
@@ -34,6 +33,14 @@ class RetrieveStatusRequest extends AbstractGetRequest
     public function getUri()
     {
         return 'status/' . $this->token;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getBody()
+    {
+        return ['token' => $this->token];
     }
 
     /**

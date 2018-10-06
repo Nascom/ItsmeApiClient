@@ -9,18 +9,21 @@ $ composer require nascom/itsme-api-client
 ```
 
 ## Basic usage
-First, you'll need to provide a client that can make HTTP requests.
-You can use this GuzzleHttp to instantiate the actual API client.
-You'll have to provide your Teamleader API credentials as well.
+First, you'll need to provide a client that can make HTTP requests. For now,
+only Guzzle is supported.
+
 ```php
 <?php
 
 use Nascom\ItsmeApiClient\Http\ApiClient\ApiClient;
-use Nascom\ItsmeApiClient\Http\ApiClient\Service
+use Nascom\ItsmeApiClient\Http\ApiClient\Service;
+use Nascom\ItsmeApiClient\Http\ApiClient\ApiClientFactory;
 
 $guzzleClient = new \GuzzleHttp\Client(['base_uri' => Service::PRODUCTION]);
-
 $client = new ApiClient($guzzleClient);
+
+// Alternatively, you can use the ApiClientFactory.
+$client = ApiClientFactory::production();
 ```
 
 ### Making requests
@@ -34,9 +37,9 @@ Creating a transaction:
 use Nascom\ItsmeApiClient\Request\Transaction\CreateTransactionRequest;
 
 $transactionRequest = new CreateTransactionRequest($token, $service, $redirectUrl);
-$transation = $client->handle($transactionRequest);
+$transaction = $client->handle($transactionRequest);
 
-echo $transation->getAuthenticationUrl();
+echo $transaction->getAuthenticationUrl();
 ```
 
 Retrieve status after validation of itsme:

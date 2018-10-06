@@ -12,7 +12,6 @@ use Nascom\ItsmeApiClient\Response\Transaction\Transaction;
  */
 class CreateTransactionRequest extends AbstractPostRequest
 {
-
     /**
      * @var string
      */
@@ -26,7 +25,7 @@ class CreateTransactionRequest extends AbstractPostRequest
     /**
      * @var array
      */
-    private $scope = [];
+    private $scopes = [];
 
     /**
      * @var string
@@ -58,11 +57,11 @@ class CreateTransactionRequest extends AbstractPostRequest
     }
 
     /**
-     * @param array $scope
+     * @param array $scopes
      */
-    public function setScope($scope)
+    public function setScopes(array $scopes)
     {
-        $this->scope = $scope;
+        $this->scopes = $scopes;
     }
 
     /**
@@ -79,6 +78,21 @@ class CreateTransactionRequest extends AbstractPostRequest
     public function setPhoneNumber($phoneNumber)
     {
         $this->phoneNumber = $phoneNumber;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getBody()
+    {
+        return array_filter([
+            'token' => $this->token,
+            'service' => $this->service,
+            'redirectUrl' => $this->redirectUrl,
+            'locale' => $this->locale,
+            'scopes' => $this->scopes,
+            'phoneNumber' => $this->phoneNumber
+        ]);
     }
 
     /**

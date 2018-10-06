@@ -2,8 +2,9 @@
 
 namespace Nascom\ItsmeApiClient\Http\ApiClient;
 
+use GuzzleHttp\Exception\ClientException;
 use Nascom\ItsmeApiClient\Exception\InvalidParametersException;
-use Nascom\ItsmeApiClient\Exception\ServerException;
+use Nascom\ItsmeApiClient\Exception\ItsMeException;
 use GuzzleHttp\ClientInterface;
 use Nascom\ItsmeApiClient\Request\RequestInterface;
 
@@ -53,25 +54,54 @@ class ApiClient implements ApiClientInterface
      */
     public function handle(RequestInterface $request)
     {
-        $response = $this->guzzleClient->request(
-            $request->getMethod(),
-            $request->getUri(),
-            $this->options
-        );
-
-        $body = $response
-            ->getBody()
-            ->getContents();
-        $jsonResponse = json_decode($body);
-
-        // Check for API error
-        switch ($response->getStatusCode()) {
-            case 400:
-                throw new InvalidParametersException($jsonResponse['message'], $jsonResponse['status']);
-            case 500;
-                throw new ServerException('Unexpected server error', 500);
+        $options = $this->options;
+        $requestBody = $request->getBody();
+        if (!empty($requestBody)) {
+            $options['form_params'] = $requestBody;
         }
 
-        return call_user_func_array([$request->getResponseClass(), 'fromArray'], $jsonResponse);
+        try {
+            $response = $this->guzzleClient->request(
+                $request->getMethod(),
+                $request->getUri(),
+                $options
+            );
+        }
+        catch (ClientException $e) {
+            $this->handleClientException($e);
+        }
+        catch (\Exception $e) {
+            throw ItsMeException::fromException($e);
+        }
+
+        $body = $response->getBody()->getContents();
+        $jsonResponse = json_decode($body, true);
+
+        return call_user_func(
+            [$request->getResponseClass(), 'fromArray'],
+            $jsonResponse
+        );
+    }
+
+    /**
+     * @param ClientException $e
+     * @throws ItsMeException
+     */
+    private function handleClientException(ClientException $e)
+    {
+        $response = $e->getResponse();
+        if (!$response || $response->getStatusCode() !== 400) {
+            throw ItsMeException::fromException($e);
+        }
+
+        // Provide the feedback of the bad request as the exception message.
+        $message = $response->getBody()->getContents();
+        $message = json_decode($message, true);
+        if (isset($message['message'], $message['status'])) {
+            throw new InvalidParametersException(
+                $message['message'],
+                $message['status']
+            );
+        }
     }
 }

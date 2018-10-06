@@ -30,7 +30,7 @@ class Name
      *
      * @return Name
      */
-    public static function fromArray($data = []) {
+    public static function fromArray(array $data) {
         $name = new self();
 
         $name->givenName = $data['givenName'];
